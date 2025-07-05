@@ -1,0 +1,1 @@
+CREATE TYPE user_roles AS ENUM ('FRESH_USER', 'USER', 'ADMIN');
