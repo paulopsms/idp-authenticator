@@ -17,4 +17,4 @@ COPY --from=build /app/target/*.jar idp-authenticator.jar
 
 EXPOSE 8091
 
-ENTRYPOINT ["java", "-jar", "idp-authenticator.jar"]
+ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "idp-authenticator.jar"]

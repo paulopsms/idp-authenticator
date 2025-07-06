@@ -12,10 +12,17 @@ services:
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
 #      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 #      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=${EMAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${EMAIL_PASSWORD}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     env_file:
       - .env
     ports:
       - "8091:8091"
+      - "5005:5005"
     networks:
       - idp-network
 #    healthcheck:

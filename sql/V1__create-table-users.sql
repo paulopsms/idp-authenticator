@@ -1,9 +1,8 @@
 CREATE TABLE public."users"
 (
-    id uuid NOT NULL,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     name character varying(100),
-    email character varying(100),
-    password character varying(100),
-    role character varying(40),
-    PRIMARY KEY (id)
+    email character varying(100) unique,
+    password character varying(128),
+    role character varying(50)
 );
