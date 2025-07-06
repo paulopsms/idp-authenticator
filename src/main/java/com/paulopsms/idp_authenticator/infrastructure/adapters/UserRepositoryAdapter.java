@@ -33,4 +33,9 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     public Optional<User> findByEmailIgnoreCase(String email) {
         return this.userRepository.findByEmailIgnoreCase(email).map(userMapper::toModel);
     }
+
+    @Override
+    public Optional<User> findByToken(String token) {
+        return this.userRepository.findByToken(token).map(userMapper::toModel);
+    }
 }

@@ -29,9 +29,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilters(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(request -> {
-                    request.requestMatchers("/css/**", "/js/**", "/assets/**", "/images/**",
-                            "/users/forgot-password").permitAll();
+                    request.requestMatchers("/css/**", "/js/**", "/assets/**", "/images/**").permitAll();
+                    request.requestMatchers("/users/forgot-password").permitAll();
                     request.requestMatchers(HttpMethod.POST, "/users").permitAll();
+                    request.requestMatchers(HttpMethod.POST, "/users/password-recovery").permitAll();
 //                    request.requestMatchers("/users/**").hasRole(UserRoles.USER.toString());
                     request.anyRequest().authenticated();
                 })

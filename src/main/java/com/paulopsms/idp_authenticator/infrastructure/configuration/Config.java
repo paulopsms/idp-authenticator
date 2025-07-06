@@ -4,7 +4,7 @@ import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
 import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
 import com.paulopsms.idp_authenticator.application.usecases.SaveUserUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.SendTokenUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.RecoveryUserPasswordUseCase;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.EmailAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.UserRepositoryAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.mappers.UserMapper;
@@ -23,8 +23,8 @@ public class Config {
     }
 
     @Bean
-    public SendTokenUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway) {
-        return new SendTokenUseCase(userRepositoryGateway, emailGateway);
+    public RecoveryUserPasswordUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway, PasswordEncoder passwordEncoder) {
+        return new RecoveryUserPasswordUseCase(userRepositoryGateway, emailGateway, passwordEncoder);
     }
 
     @Bean
