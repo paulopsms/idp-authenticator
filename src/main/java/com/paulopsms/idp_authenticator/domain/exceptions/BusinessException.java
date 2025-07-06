@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.application.exceptions;
+package com.paulopsms.idp_authenticator.domain.exceptions;
 
 public class BusinessException extends Exception {
 

@@ -1,17 +1,14 @@
 package com.paulopsms.idp_authenticator.infrastructure.controllers;
 
+import com.paulopsms.idp_authenticator.application.dto.PasswordRecoveryRequest;
 import com.paulopsms.idp_authenticator.application.dto.SendTokenRequest;
 import com.paulopsms.idp_authenticator.application.dto.UserRequest;
 import com.paulopsms.idp_authenticator.application.dto.UserResponse;
-import com.paulopsms.idp_authenticator.application.exceptions.BusinessException;
 import com.paulopsms.idp_authenticator.application.usecases.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.SendTokenUseCase;
+import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,14 +27,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> saveUser(UserRequest request) {
+    public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest request) {
         UserResponse userResponse = this.saveUserUseCase.saveUser(request);
 
         return ResponseEntity.ok(userResponse);
     }
 
     @GetMapping
-    @PreAuthorize(value = "hasRole('ADMIN')")
+//    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> listAllUsers() {
         List<UserResponse> users = Collections.emptyList();
 
@@ -45,8 +42,20 @@ public class UserController {
     }
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(SendTokenRequest request) throws BusinessException {
+    public ResponseEntity<String> forgotPassword(@RequestBody SendTokenRequest request) throws BusinessException {
         this.sendTokenUseCase.sendToken(request);
         return ResponseEntity.ok("An email has been sent to your email address.");
+    }
+
+    @GetMapping("/change-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam("token") String token) throws BusinessException {
+//        this.sendTokenUseCase.changePassword(token);
+        return ResponseEntity.ok("Your password has been updated successfully.");
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> updatePassword(@RequestParam("token") String token, PasswordRecoveryRequest request) throws BusinessException {
+//        this.sendTokenUseCase.changePassword(token);
+        return ResponseEntity.ok("Your password has been updated successfully.");
     }
 }

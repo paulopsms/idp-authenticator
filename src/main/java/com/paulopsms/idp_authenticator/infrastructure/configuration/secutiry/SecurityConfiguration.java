@@ -1,12 +1,12 @@
 package com.paulopsms.idp_authenticator.infrastructure.configuration.secutiry;
 
-import com.paulopsms.idp_authenticator.domain.entities.user.UserRoles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,6 +31,7 @@ public class SecurityConfiguration {
         return http.authorizeHttpRequests(request -> {
                     request.requestMatchers("/css/**", "/js/**", "/assets/**", "/images/**",
                             "/users/forgot-password").permitAll();
+                    request.requestMatchers(HttpMethod.POST, "/users").permitAll();
 //                    request.requestMatchers("/users/**").hasRole(UserRoles.USER.toString());
                     request.anyRequest().authenticated();
                 })
@@ -42,7 +43,8 @@ public class SecurityConfiguration {
                 .rememberMe(remember -> remember.key("uniqueAndSecret")
                         .tokenValiditySeconds(60 * 60 * 24 * 7)
                         .alwaysRemember(true))
-                .csrf(Customizer.withDefaults())
+//                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 

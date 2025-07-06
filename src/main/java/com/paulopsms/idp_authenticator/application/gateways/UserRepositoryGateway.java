@@ -4,7 +4,7 @@ import com.paulopsms.idp_authenticator.domain.entities.user.User;
 
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepositoryGateway {
 
     User save(User user);
 

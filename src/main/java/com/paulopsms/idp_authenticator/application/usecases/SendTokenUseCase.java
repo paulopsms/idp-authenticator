@@ -1,8 +1,9 @@
 package com.paulopsms.idp_authenticator.application.usecases;
 
 import com.paulopsms.idp_authenticator.application.dto.SendTokenRequest;
-import com.paulopsms.idp_authenticator.application.exceptions.BusinessException;
-import com.paulopsms.idp_authenticator.application.gateways.UserRepository;
+import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
+import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
+import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
 import com.paulopsms.idp_authenticator.domain.entities.user.User;
 
 import java.time.LocalDateTime;
@@ -10,14 +11,17 @@ import java.util.UUID;
 
 public class SendTokenUseCase {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryGateway userRepositoryGateway;
 
-    public SendTokenUseCase(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final EmailGateway emailGateway;
+
+    public SendTokenUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway) {
+        this.userRepositoryGateway = userRepositoryGateway;
+        this.emailGateway = emailGateway;
     }
 
     public void sendToken(SendTokenRequest request) throws BusinessException {
-        User user = userRepository.findByEmailIgnoreCase(request.email())
+        User user = userRepositoryGateway.findByEmailIgnoreCase(request.email())
                 .orElseThrow(() -> new BusinessException("User not found."));
 
         String token = UUID.randomUUID().toString();
@@ -26,6 +30,7 @@ public class SendTokenUseCase {
         user.setToken(token);
         user.setTokenExpiration(expirationTime);
 
-        userRepository.save(user);
+        userRepositoryGateway.save(user);
+        this.emailGateway.sendEmail(user);
     }
 }

@@ -22,6 +22,7 @@ services:
       - .env
     ports:
       - "8091:8091"
+      - "5005:5005"
     networks:
       - idp-network
 #    healthcheck:

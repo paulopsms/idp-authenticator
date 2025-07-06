@@ -16,13 +16,13 @@ import java.util.UUID;
 public class UserEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String username;
+    private String name;
     private String password;
     private String email;
     private String token;
-
+    private LocalDateTime tokenExpiration;
 
     @Enumerated(EnumType.STRING)
     private UserRoles role;
@@ -39,7 +39,36 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
+    }
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getToken() {
@@ -58,6 +87,11 @@ public class UserEntity implements UserDetails {
         this.tokenExpiration = tokenExpiration;
     }
 
-    private LocalDateTime tokenExpiration;
+    public UserRoles getRole() {
+        return role;
+    }
 
+    public void setRole(UserRoles role) {
+        this.role = role;
+    }
 }
