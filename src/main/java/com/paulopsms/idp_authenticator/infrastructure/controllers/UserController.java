@@ -5,7 +5,7 @@ import com.paulopsms.idp_authenticator.application.dto.SendTokenRequest;
 import com.paulopsms.idp_authenticator.application.dto.UserRequest;
 import com.paulopsms.idp_authenticator.application.dto.UserResponse;
 import com.paulopsms.idp_authenticator.application.usecases.SaveUserUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.SendTokenUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.RecoveryUserPasswordUseCase;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +19,11 @@ public class UserController {
 
     private final SaveUserUseCase saveUserUseCase;
 
-    private final SendTokenUseCase sendTokenUseCase;
+    private final RecoveryUserPasswordUseCase recoveryUserPasswordUseCase;
 
-    public UserController(SaveUserUseCase saveUserUseCase, SendTokenUseCase sendTokenUseCase) {
+    public UserController(SaveUserUseCase saveUserUseCase, RecoveryUserPasswordUseCase recoveryUserPasswordUseCase) {
         this.saveUserUseCase = saveUserUseCase;
-        this.sendTokenUseCase = sendTokenUseCase;
+        this.recoveryUserPasswordUseCase = recoveryUserPasswordUseCase;
     }
 
     @PostMapping
@@ -43,19 +43,20 @@ public class UserController {
 
     @GetMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody SendTokenRequest request) throws BusinessException {
-        this.sendTokenUseCase.sendToken(request);
+        this.recoveryUserPasswordUseCase.sendToken(request);
         return ResponseEntity.ok("An email has been sent to your email address.");
     }
 
-    @GetMapping("/change-password")
-    public ResponseEntity<String> forgotPassword(@RequestParam("token") String token) throws BusinessException {
-//        this.sendTokenUseCase.changePassword(token);
-        return ResponseEntity.ok("Your password has been updated successfully.");
-    }
+//    @GetMapping("/password-recovery")
+//    public ResponseEntity<String> forgotPassword(@RequestParam("token") String token) throws BusinessException {
+////        this.sendTokenUseCase.changePassword(token);
+//        return ResponseEntity.ok("Your password has been updated successfully.");
+//    }
 
-    @PostMapping("/change-password")
-    public ResponseEntity<String> updatePassword(@RequestParam("token") String token, PasswordRecoveryRequest request) throws BusinessException {
-//        this.sendTokenUseCase.changePassword(token);
+    @PostMapping("/password-recovery")
+    public ResponseEntity<String> updatePassword(@RequestParam("token") String token, @RequestBody PasswordRecoveryRequest request) throws BusinessException {
+        this.recoveryUserPasswordUseCase.changePassword(token, request);
+
         return ResponseEntity.ok("Your password has been updated successfully.");
     }
 }

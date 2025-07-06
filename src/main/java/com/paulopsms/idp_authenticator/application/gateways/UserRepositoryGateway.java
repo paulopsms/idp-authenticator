@@ -9,4 +9,6 @@ public interface UserRepositoryGateway {
     User save(User user);
 
     Optional<User> findByEmailIgnoreCase(String email);
+
+    Optional<User> findByToken(String token);
 }
