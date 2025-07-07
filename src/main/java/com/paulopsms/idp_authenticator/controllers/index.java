@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.infrastructure.controllers;
+package com.paulopsms.idp_authenticator.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,7 +1,7 @@
-package com.paulopsms.idp_authenticator.application.usecases;
+package com.paulopsms.idp_authenticator.application.usecases.user;
 
-import com.paulopsms.idp_authenticator.application.dto.UserRequest;
-import com.paulopsms.idp_authenticator.application.dto.UserResponse;
+import com.paulopsms.idp_authenticator.application.dto.user.UserRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.UserResponse;
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
 import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
 import com.paulopsms.idp_authenticator.domain.entities.user.User;

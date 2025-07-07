@@ -1,11 +1,11 @@
-package com.paulopsms.idp_authenticator.infrastructure.controllers;
+package com.paulopsms.idp_authenticator.controllers;
 
-import com.paulopsms.idp_authenticator.application.dto.PasswordRecoveryRequest;
-import com.paulopsms.idp_authenticator.application.dto.SendTokenRequest;
-import com.paulopsms.idp_authenticator.application.dto.UserRequest;
-import com.paulopsms.idp_authenticator.application.dto.UserResponse;
-import com.paulopsms.idp_authenticator.application.usecases.SaveUserUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.RecoveryUserPasswordUseCase;
+import com.paulopsms.idp_authenticator.application.dto.user.PasswordRecoveryRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.ForgotPasswordRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.UserRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.UserResponse;
+import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody SendTokenRequest request) throws BusinessException {
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) throws BusinessException {
         this.recoveryUserPasswordUseCase.sendToken(request);
         return ResponseEntity.ok("An email has been sent to your email address.");
     }

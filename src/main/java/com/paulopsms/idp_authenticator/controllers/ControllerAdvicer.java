@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.infrastructure.controllers;
+package com.paulopsms.idp_authenticator.controllers;
 
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
