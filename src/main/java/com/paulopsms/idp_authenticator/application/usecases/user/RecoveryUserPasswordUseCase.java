@@ -1,7 +1,7 @@
-package com.paulopsms.idp_authenticator.application.usecases;
+package com.paulopsms.idp_authenticator.application.usecases.user;
 
-import com.paulopsms.idp_authenticator.application.dto.PasswordRecoveryRequest;
-import com.paulopsms.idp_authenticator.application.dto.SendTokenRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.PasswordRecoveryRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.ForgotPasswordRequest;
 import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
@@ -25,7 +25,7 @@ public class RecoveryUserPasswordUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void sendToken(SendTokenRequest request) throws BusinessException {
+    public void sendToken(ForgotPasswordRequest request) throws BusinessException {
         User user = userRepositoryGateway.findByEmailIgnoreCase(request.email())
                 .orElseThrow(() -> new BusinessException("User not found."));
 
