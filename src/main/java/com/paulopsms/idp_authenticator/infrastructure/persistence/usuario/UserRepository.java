@@ -1,6 +1,5 @@
 package com.paulopsms.idp_authenticator.infrastructure.persistence.usuario;
 
-import com.paulopsms.idp_authenticator.domain.entities.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
