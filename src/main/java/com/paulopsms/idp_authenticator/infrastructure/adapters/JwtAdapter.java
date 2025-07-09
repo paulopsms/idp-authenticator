@@ -14,14 +14,14 @@ import java.time.ZoneOffset;
 public class JwtAdapter implements JwtGateway {
 
     @Override
-    public String generateToken(User user) throws BusinessException {
+    public String generateToken(String subject, Integer expirationTime) throws BusinessException {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
 
             return JWT.create()
                     .withIssuer("FinMan")
-                    .withSubject(user.getEmail())
-                    .withExpiresAt(this.expirationTime(30))
+                    .withSubject(subject)
+                    .withExpiresAt(this.expirationTime(expirationTime))
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new BusinessException("Error generating JWT token.");
