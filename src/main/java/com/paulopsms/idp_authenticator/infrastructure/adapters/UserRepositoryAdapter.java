@@ -7,6 +7,7 @@ import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserEn
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class UserRepositoryAdapter implements UserRepositoryGateway {
 
@@ -37,5 +38,10 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
     @Override
     public Optional<User> findByToken(String token) {
         return this.userRepository.findByToken(token).map(userMapper::toModel);
+    }
+
+    @Override
+    public Optional<User> findById(UUID id) {
+        return this.userRepository.findById(id).map(userMapper::toModel);
     }
 }

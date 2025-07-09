@@ -65,6 +65,7 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/login").permitAll();
+                    req.requestMatchers("/refresh-token").permitAll();
 //                    req.requestMatchers("/api/**").permitAll();
                     req.anyRequest().authenticated();
                 })
