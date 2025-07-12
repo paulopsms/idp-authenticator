@@ -1,19 +1,16 @@
 package com.paulopsms.idp_authenticator.infrastructure.configuration;
 
-import com.paulopsms.idp_authenticator.application.gateways.AuthenticationGateway;
-import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
-import com.paulopsms.idp_authenticator.application.gateways.JwtGateway;
-import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
+import com.paulopsms.idp_authenticator.application.gateways.*;
 import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
+import com.paulopsms.idp_authenticator.application.usecases.LoggedInUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.LoginUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.RefreshTokenUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.AuthenticationAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.EmailAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.JwtAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.UserRepositoryAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.*;
 import com.paulopsms.idp_authenticator.infrastructure.mappers.UserMapper;
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserRepository;
+import com.paulopsms.idp_authenticator.infrastructure.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -61,5 +58,25 @@ public class Config {
     @Bean
     public UserDtoMapper createUserDtoMapper() {
         return new UserDtoMapper();
+    }
+
+    @Bean
+    public RefreshTokenUseCase createRefreshTokenUseCase(RefreshTokenGateway refreshTokenGateway, UserRepositoryGateway userRepositoryGateway, JwtGateway jwtGateway) {
+        return new RefreshTokenUseCase(refreshTokenGateway, userRepositoryGateway, jwtGateway);
+    }
+
+    @Bean
+    public RefreshTokenGateway createRefreshTokenGateway(JwtService jwtService) {
+        return new RefreshTokenAdapter(jwtService);
+    }
+
+    @Bean
+    public LoggedInUserUseCase createLoggedInUserUseCase(LoggedInUserGateway loggedInUserGateway, UserDtoMapper userDtoMapper) {
+        return new LoggedInUserUseCase(loggedInUserGateway, userDtoMapper);
+    }
+
+    @Bean
+    public LoggedInUserGateway createLoggedInUserGateway(UserMapper userMapper) {
+        return new LoggedInUserAdapter(userMapper);
     }
 }

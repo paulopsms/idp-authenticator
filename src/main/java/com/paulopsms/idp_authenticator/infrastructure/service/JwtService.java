@@ -23,7 +23,7 @@ public class JwtService {
             decodedJWT = verifier.verify(token);
 
             return decodedJWT.getSubject();
-        } catch ( JWTVerificationException e){
+        } catch ( JWTVerificationException e) {
             throw new BusinessException("Error verifying JWT token: " + e.getMessage());
         }
     }
