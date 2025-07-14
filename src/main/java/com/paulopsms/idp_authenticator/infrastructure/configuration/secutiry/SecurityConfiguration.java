@@ -69,6 +69,8 @@ public class SecurityConfiguration {
                     req.requestMatchers("/login").permitAll();
                     req.requestMatchers(POST, "/users").permitAll();
                     req.requestMatchers("/refresh-token").permitAll();
+                    req.requestMatchers(POST, "/users/password-recovery").permitAll();
+                    req.requestMatchers(POST, "/users/verify-account").permitAll();
 //                    req.requestMatchers("/api/**").permitAll();
                     req.anyRequest().authenticated();
                 })

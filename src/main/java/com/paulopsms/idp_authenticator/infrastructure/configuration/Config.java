@@ -2,14 +2,21 @@ package com.paulopsms.idp_authenticator.infrastructure.configuration;
 
 import com.paulopsms.idp_authenticator.application.gateways.*;
 import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
-import com.paulopsms.idp_authenticator.application.usecases.LoggedInUserUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.LoginUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.RefreshTokenUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.LoggedInUserUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.LoginUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.RefreshTokenUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.*;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.AuthenticationAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.JwtAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.LoggedInUserAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.RefreshTokenAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.ForgotPasswordEmailAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.UserRepositoryAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.VerifyUserAccountEmailAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.mappers.UserMapper;
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserRepository;
+import com.paulopsms.idp_authenticator.infrastructure.service.EmailService;
 import com.paulopsms.idp_authenticator.infrastructure.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,18 +28,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Config {
 
     @Bean
-    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder) {
-        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder);
+    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder, VerifyUserAccountEmailGateway verifyUserAccountEmailGateway) {
+        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder, verifyUserAccountEmailGateway);
     }
 
     @Bean
-    public RecoveryUserPasswordUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway, PasswordEncoder passwordEncoder) {
+    public RecoveryUserPasswordUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, ForgotPasswordEmailGateway emailGateway, PasswordEncoder passwordEncoder) {
         return new RecoveryUserPasswordUseCase(userRepositoryGateway, emailGateway, passwordEncoder);
     }
 
     @Bean
-    public EmailGateway createEmailGateway(JavaMailSender javaMailSender) {
-        return new EmailAdapter(javaMailSender);
+    public ForgotPasswordEmailGateway createForgotPasswordEmailGateway(EmailService emailService) {
+        return new ForgotPasswordEmailAdapter(emailService);
+    }
+
+    @Bean
+    public VerifyUserAccountEmailGateway createVerifyUserEmailGateway(EmailService emailService) {
+        return new VerifyUserAccountEmailAdapter(emailService);
+    }
+
+    @Bean
+    public EmailService createEmailService(JavaMailSender javaMailSender) {
+        return new EmailService(javaMailSender);
     }
 
     @Bean

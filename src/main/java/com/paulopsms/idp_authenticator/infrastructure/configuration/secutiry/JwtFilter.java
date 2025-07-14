@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // get token from request
-        String token = getRequestToken(request);
+        String token = this.getRequestToken(request);
 
         if (token != null) {
             try {
@@ -64,18 +64,18 @@ public class JwtFilter extends OncePerRequestFilter {
         } else return null;
     }
 
-    private String verifyToken(String token) throws BusinessException {
-        DecodedJWT decodedJWT;
-        try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("FinMan")
-                    .build();
-
-            decodedJWT = verifier.verify(token);
-            return decodedJWT.getSubject();
-        } catch ( JWTVerificationException e){
-            throw new BusinessException("Error verifying JWT token: " + e.getMessage());
-        }
-    }
+//    private String verifyToken(String token) throws BusinessException {
+//        DecodedJWT decodedJWT;
+//        try {
+//            Algorithm algorithm = Algorithm.HMAC256("secret");
+//            JWTVerifier verifier = JWT.require(algorithm)
+//                    .withIssuer("FinMan")
+//                    .build();
+//
+//            decodedJWT = verifier.verify(token);
+//            return decodedJWT.getSubject();
+//        } catch ( JWTVerificationException e){
+//            throw new BusinessException("Error verifying JWT token: " + e.getMessage());
+//        }
+//    }
 }

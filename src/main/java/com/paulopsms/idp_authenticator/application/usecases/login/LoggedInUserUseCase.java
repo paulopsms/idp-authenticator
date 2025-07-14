@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.application.usecases;
+package com.paulopsms.idp_authenticator.application.usecases.login;
 
 import com.paulopsms.idp_authenticator.application.dto.user.UserResponse;
 import com.paulopsms.idp_authenticator.application.gateways.LoggedInUserGateway;

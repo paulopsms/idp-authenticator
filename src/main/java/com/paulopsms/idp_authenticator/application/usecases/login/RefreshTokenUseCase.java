@@ -1,9 +1,7 @@
-package com.paulopsms.idp_authenticator.application.usecases;
+package com.paulopsms.idp_authenticator.application.usecases.login;
 
 import com.paulopsms.idp_authenticator.application.dto.RefreshTokenRequest;
 import com.paulopsms.idp_authenticator.application.dto.TokenResponse;
-import com.paulopsms.idp_authenticator.application.dto.login.LoginRequest;
-import com.paulopsms.idp_authenticator.application.gateways.AuthenticationGateway;
 import com.paulopsms.idp_authenticator.application.gateways.JwtGateway;
 import com.paulopsms.idp_authenticator.application.gateways.RefreshTokenGateway;
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
