@@ -23,6 +23,7 @@ public class UserEntity implements UserDetails {
     private String email;
     private String token;
     private LocalDateTime tokenExpiration;
+    private Boolean verified;
 
     @Enumerated(EnumType.STRING)
     private UserRoles role;

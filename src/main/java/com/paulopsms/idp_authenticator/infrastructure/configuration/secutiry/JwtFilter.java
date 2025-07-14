@@ -6,8 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
-import com.paulopsms.idp_authenticator.domain.entities.user.User;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessRuntimeException;
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserEntity;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -47,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 String userEmail = this.jwtService.verifyToken(token);
 
-                UserEntity user = this.userRepository.findByEmailIgnoreCase(userEmail).orElseThrow();
+                UserEntity user = this.userRepository.findByEmailIgnoreCaseAndVerifiedTrue(userEmail).orElseThrow();
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);

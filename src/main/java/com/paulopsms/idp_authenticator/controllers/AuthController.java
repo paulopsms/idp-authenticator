@@ -7,7 +7,6 @@ import com.paulopsms.idp_authenticator.application.dto.user.UserResponse;
 import com.paulopsms.idp_authenticator.application.usecases.LoggedInUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.LoginUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.RefreshTokenUseCase;
-import com.paulopsms.idp_authenticator.domain.entities.user.User;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

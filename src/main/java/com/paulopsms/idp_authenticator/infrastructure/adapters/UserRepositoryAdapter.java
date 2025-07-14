@@ -32,7 +32,7 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
 
     @Override
     public Optional<User> findByEmailIgnoreCase(String email) {
-        return this.userRepository.findByEmailIgnoreCase(email).map(userMapper::toModel);
+        return this.userRepository.findByEmailIgnoreCaseAndVerifiedTrue(email).map(userMapper::toModel);
     }
 
     @Override

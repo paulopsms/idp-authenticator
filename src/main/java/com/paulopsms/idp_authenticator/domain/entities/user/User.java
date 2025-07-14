@@ -12,6 +12,7 @@ public class User {
     private String token;
     private LocalDateTime tokenExpiration;
     private UserRoles role;
+    private Boolean verified;
 
     public User() {
     }
@@ -21,6 +22,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = UserRoles.FRESH_USER;
+        this.token = UUID.randomUUID().toString();
+        this.tokenExpiration = LocalDateTime.now().plusMinutes(20);
+        this.verified = false;
     }
 
     //    public User(String username, String password, String email, String token, LocalDateTime tokenExpiration, UserRoles role) {
@@ -87,5 +91,13 @@ public class User {
 
     public void setRole(UserRoles role) {
         this.role = role;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }
