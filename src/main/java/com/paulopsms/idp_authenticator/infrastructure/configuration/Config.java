@@ -7,6 +7,7 @@ import com.paulopsms.idp_authenticator.application.usecases.login.LoginUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.login.RefreshTokenUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.user.VerifyAccountUseCase;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.AuthenticationAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.JwtAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.LoggedInUserAdapter;
@@ -95,5 +96,10 @@ public class Config {
     @Bean
     public LoggedInUserGateway createLoggedInUserGateway(UserMapper userMapper) {
         return new LoggedInUserAdapter(userMapper);
+    }
+
+    @Bean
+    public VerifyAccountUseCase createVerifyAccountUseCase(UserRepositoryGateway userRepositoryGateway) {
+        return new VerifyAccountUseCase(userRepositoryGateway);
     }
 }

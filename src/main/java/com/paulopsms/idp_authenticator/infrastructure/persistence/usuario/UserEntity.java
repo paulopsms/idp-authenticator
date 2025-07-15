@@ -95,4 +95,12 @@ public class UserEntity implements UserDetails {
     public void setRole(UserRoles role) {
         this.role = role;
     }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
 }
