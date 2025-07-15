@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.infrastructure.adapters;
+package com.paulopsms.idp_authenticator.infrastructure.adapters.login;
 
 import com.paulopsms.idp_authenticator.application.gateways.RefreshTokenGateway;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;

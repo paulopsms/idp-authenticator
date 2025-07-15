@@ -23,6 +23,7 @@ public class UserEntity implements UserDetails {
     private String email;
     private String token;
     private LocalDateTime tokenExpiration;
+    private Boolean verified;
 
     @Enumerated(EnumType.STRING)
     private UserRoles role;
@@ -93,5 +94,13 @@ public class UserEntity implements UserDetails {
 
     public void setRole(UserRoles role) {
         this.role = role;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }
