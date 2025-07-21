@@ -2,7 +2,7 @@ package com.paulopsms.idp_authenticator.application.usecases.user;
 
 import com.paulopsms.idp_authenticator.application.dto.user.PasswordRecoveryRequest;
 import com.paulopsms.idp_authenticator.application.dto.user.ForgotPasswordRequest;
-import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
+import com.paulopsms.idp_authenticator.application.gateways.ForgotPasswordEmailGateway;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
 import com.paulopsms.idp_authenticator.domain.entities.user.User;
@@ -15,13 +15,13 @@ public class RecoveryUserPasswordUseCase {
 
     private final UserRepositoryGateway userRepositoryGateway;
 
-    private final EmailGateway emailGateway;
+    private final ForgotPasswordEmailGateway forgotPasswordEmailGateway;
 
     private final PasswordEncoder passwordEncoder;
 
-    public RecoveryUserPasswordUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway, PasswordEncoder passwordEncoder) {
+    public RecoveryUserPasswordUseCase(UserRepositoryGateway userRepositoryGateway, ForgotPasswordEmailGateway forgotPasswordEmailGateway, PasswordEncoder passwordEncoder) {
         this.userRepositoryGateway = userRepositoryGateway;
-        this.emailGateway = emailGateway;
+        this.forgotPasswordEmailGateway = forgotPasswordEmailGateway;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -36,7 +36,7 @@ public class RecoveryUserPasswordUseCase {
         user.setTokenExpiration(expirationTime);
 
         userRepositoryGateway.save(user);
-        this.emailGateway.sendEmail(user);
+        this.forgotPasswordEmailGateway.sendEmail(user);
     }
 
     public void changePassword(String token, PasswordRecoveryRequest request) throws BusinessException {
@@ -60,6 +60,7 @@ public class RecoveryUserPasswordUseCase {
         user.setPassword(encodedPassword);
         user.setToken(null);
         user.setTokenExpiration(null);
+        user.setVerified(true);
 
         userRepositoryGateway.save(user);
     }

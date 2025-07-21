@@ -1,9 +1,8 @@
 package com.paulopsms.idp_authenticator.infrastructure.persistence.usuario;
 
-import com.paulopsms.idp_authenticator.domain.entities.user.UserRoles;
+import com.paulopsms.idp_authenticator.infrastructure.persistence.role.RoleEntity;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,17 @@ public class UserEntity implements UserDetails {
     private String email;
     private String token;
     private LocalDateTime tokenExpiration;
+    private Boolean verified;
 
-    @Enumerated(EnumType.STRING)
-    private UserRoles role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return this.roles;
     }
 
     @Override
@@ -87,11 +90,19 @@ public class UserEntity implements UserDetails {
         this.tokenExpiration = tokenExpiration;
     }
 
-    public UserRoles getRole() {
-        return role;
+    public Boolean getVerified() {
+        return verified;
     }
 
-    public void setRole(UserRoles role) {
-        this.role = role;
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public List<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
     }
 }

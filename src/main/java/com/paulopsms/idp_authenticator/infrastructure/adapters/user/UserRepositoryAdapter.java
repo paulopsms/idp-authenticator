@@ -1,4 +1,4 @@
-package com.paulopsms.idp_authenticator.infrastructure.adapters;
+package com.paulopsms.idp_authenticator.infrastructure.adapters.user;
 
 import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
 import com.paulopsms.idp_authenticator.domain.entities.user.User;
@@ -32,7 +32,7 @@ public class UserRepositoryAdapter implements UserRepositoryGateway {
 
     @Override
     public Optional<User> findByEmailIgnoreCase(String email) {
-        return this.userRepository.findByEmailIgnoreCase(email).map(userMapper::toModel);
+        return this.userRepository.findByEmailIgnoreCaseAndVerifiedTrue(email).map(userMapper::toModel);
     }
 
     @Override

@@ -1,10 +1,9 @@
-package com.paulopsms.idp_authenticator.infrastructure.adapters;
+package com.paulopsms.idp_authenticator.infrastructure.adapters.login;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.paulopsms.idp_authenticator.application.gateways.JwtGateway;
-import com.paulopsms.idp_authenticator.domain.entities.user.User;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 
 import java.time.Instant;

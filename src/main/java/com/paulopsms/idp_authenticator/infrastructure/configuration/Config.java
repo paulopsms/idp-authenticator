@@ -1,19 +1,27 @@
 package com.paulopsms.idp_authenticator.infrastructure.configuration;
 
-import com.paulopsms.idp_authenticator.application.gateways.AuthenticationGateway;
-import com.paulopsms.idp_authenticator.application.gateways.EmailGateway;
-import com.paulopsms.idp_authenticator.application.gateways.JwtGateway;
-import com.paulopsms.idp_authenticator.application.gateways.UserRepositoryGateway;
+import com.paulopsms.idp_authenticator.application.gateways.*;
 import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
-import com.paulopsms.idp_authenticator.application.usecases.LoginUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.LoggedInUserUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.LoginUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.login.RefreshTokenUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.AuthenticationAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.EmailAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.JwtAdapter;
-import com.paulopsms.idp_authenticator.infrastructure.adapters.UserRepositoryAdapter;
+import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.user.VerifyAccountUseCase;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.AuthenticationAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.JwtAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.LoggedInUserAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.login.RefreshTokenAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.role.RoleRepositoryAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.ForgotPasswordEmailAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.UserRepositoryAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.user.VerifyUserAccountEmailAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.mappers.RoleMapper;
 import com.paulopsms.idp_authenticator.infrastructure.mappers.UserMapper;
+import com.paulopsms.idp_authenticator.infrastructure.persistence.role.RoleRepository;
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserRepository;
+import com.paulopsms.idp_authenticator.infrastructure.service.EmailService;
+import com.paulopsms.idp_authenticator.infrastructure.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,18 +32,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Config {
 
     @Bean
-    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder) {
-        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder);
+    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder,
+                                                 VerifyUserAccountEmailGateway verifyUserAccountEmailGateway, RoleRepositoryGateway roleRepositoryGateway) {
+        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder, verifyUserAccountEmailGateway, roleRepositoryGateway);
     }
 
     @Bean
-    public RecoveryUserPasswordUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, EmailGateway emailGateway, PasswordEncoder passwordEncoder) {
+    public RecoveryUserPasswordUseCase createSendTokenUseCase(UserRepositoryGateway userRepositoryGateway, ForgotPasswordEmailGateway emailGateway, PasswordEncoder passwordEncoder) {
         return new RecoveryUserPasswordUseCase(userRepositoryGateway, emailGateway, passwordEncoder);
     }
 
     @Bean
-    public EmailGateway createEmailGateway(JavaMailSender javaMailSender) {
-        return new EmailAdapter(javaMailSender);
+    public ForgotPasswordEmailGateway createForgotPasswordEmailGateway(EmailService emailService) {
+        return new ForgotPasswordEmailAdapter(emailService);
+    }
+
+    @Bean
+    public VerifyUserAccountEmailGateway createVerifyUserEmailGateway(EmailService emailService) {
+        return new VerifyUserAccountEmailAdapter(emailService);
+    }
+
+    @Bean
+    public EmailService createEmailService(JavaMailSender javaMailSender) {
+        return new EmailService(javaMailSender);
     }
 
     @Bean
@@ -45,7 +64,7 @@ public class Config {
 
     @Bean
     public AuthenticationGateway createAuthenticationGateway(AuthenticationManager authenticationManager, UserMapper userMapper) {
-       return new AuthenticationAdapter(authenticationManager, userMapper);
+        return new AuthenticationAdapter(authenticationManager, userMapper);
     }
 
     @Bean
@@ -54,12 +73,42 @@ public class Config {
     }
 
     @Bean
-    public UserRepositoryAdapter createUserRepositoryImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserRepositoryAdapter createUserRepositoryGateway(UserRepository userRepository, UserMapper userMapper) {
         return new UserRepositoryAdapter(userRepository, userMapper);
+    }
+
+    @Bean
+    public RoleRepositoryGateway createRoleRepositoryGateway(RoleRepository roleRepository, RoleMapper roleMapper) {
+        return new RoleRepositoryAdapter(roleRepository, roleMapper);
     }
 
     @Bean
     public UserDtoMapper createUserDtoMapper() {
         return new UserDtoMapper();
+    }
+
+    @Bean
+    public RefreshTokenUseCase createRefreshTokenUseCase(RefreshTokenGateway refreshTokenGateway, UserRepositoryGateway userRepositoryGateway, JwtGateway jwtGateway) {
+        return new RefreshTokenUseCase(refreshTokenGateway, userRepositoryGateway, jwtGateway);
+    }
+
+    @Bean
+    public RefreshTokenGateway createRefreshTokenGateway(JwtService jwtService) {
+        return new RefreshTokenAdapter(jwtService);
+    }
+
+    @Bean
+    public LoggedInUserUseCase createLoggedInUserUseCase(LoggedInUserGateway loggedInUserGateway, UserDtoMapper userDtoMapper) {
+        return new LoggedInUserUseCase(loggedInUserGateway, userDtoMapper);
+    }
+
+    @Bean
+    public LoggedInUserGateway createLoggedInUserGateway(UserMapper userMapper) {
+        return new LoggedInUserAdapter(userMapper);
+    }
+
+    @Bean
+    public VerifyAccountUseCase createVerifyAccountUseCase(UserRepositoryGateway userRepositoryGateway, RoleRepositoryGateway roleRepositoryGateway) {
+        return new VerifyAccountUseCase(userRepositoryGateway, roleRepositoryGateway);
     }
 }
