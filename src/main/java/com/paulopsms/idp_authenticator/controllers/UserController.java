@@ -42,10 +42,9 @@ public class UserController {
 
     @GetMapping
 //    @PreAuthorize(value = "hasRole('ADMIN')")
-    public ResponseEntity<List<String>> listAllUsers() {
+    public ResponseEntity<List<UserResponse>> listAllUsers() {
         List<UserResponse> users = Collections.emptyList();
-        List<String> list = asList(FRESH_USER.name(), FRESH_USER.toString());
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/forgot-password")
