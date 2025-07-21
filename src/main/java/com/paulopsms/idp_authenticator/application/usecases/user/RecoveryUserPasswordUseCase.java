@@ -60,6 +60,7 @@ public class RecoveryUserPasswordUseCase {
         user.setPassword(encodedPassword);
         user.setToken(null);
         user.setTokenExpiration(null);
+        user.setVerified(true);
 
         userRepositoryGateway.save(user);
     }

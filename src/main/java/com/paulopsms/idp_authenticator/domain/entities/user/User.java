@@ -1,6 +1,10 @@
 package com.paulopsms.idp_authenticator.domain.entities.user;
 
+import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -11,8 +15,8 @@ public class User {
     private String password;
     private String token;
     private LocalDateTime tokenExpiration;
-    private UserRoles role;
     private Boolean verified;
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
@@ -21,21 +25,10 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = UserRoles.FRESH_USER;
         this.token = UUID.randomUUID().toString();
         this.tokenExpiration = LocalDateTime.now().plusMinutes(20);
         this.verified = false;
     }
-
-    //    public User(String username, String password, String email, String token, LocalDateTime tokenExpiration, UserRoles role) {
-//        this.username = username;
-//        this.password = password;
-//        this.email = email;
-//        this.token = token;
-//        this.tokenExpiration = tokenExpiration;
-//        this.role = role;
-//    }
-
 
     public UUID getId() {
         return id;
@@ -85,12 +78,12 @@ public class User {
         this.tokenExpiration = tokenExpiration;
     }
 
-    public UserRoles getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(UserRoles role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public Boolean getVerified() {
@@ -99,5 +92,19 @@ public class User {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void accountVerification() throws BusinessException {
+        if (this.tokenExpiration.isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Token has expired.");
+        }
+
+        this.token = null;
+        this.tokenExpiration = null;
+        this.verified = true;
     }
 }

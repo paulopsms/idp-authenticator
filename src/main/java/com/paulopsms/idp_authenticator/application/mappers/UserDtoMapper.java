@@ -7,7 +7,7 @@ import com.paulopsms.idp_authenticator.domain.entities.user.User;
 public class UserDtoMapper {
 
     public UserResponse toUserResponse(User user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRoles());
     }
 
     public User toModel(UserRequest request) {

@@ -20,6 +20,8 @@ public class LoggedInUserAdapter implements LoggedInUserGateway {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+//        List<RoleEntity> authorities = (List<RoleEntity>) authentication.getAuthorities();
+//        userEntity.setRoles(authorities);
 
         return this.userMapper.toModel(userEntity);
     }

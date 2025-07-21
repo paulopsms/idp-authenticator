@@ -1,11 +1,11 @@
 package com.paulopsms.idp_authenticator.controllers;
 
-import com.paulopsms.idp_authenticator.application.dto.user.PasswordRecoveryRequest;
 import com.paulopsms.idp_authenticator.application.dto.user.ForgotPasswordRequest;
+import com.paulopsms.idp_authenticator.application.dto.user.PasswordRecoveryRequest;
 import com.paulopsms.idp_authenticator.application.dto.user.UserRequest;
 import com.paulopsms.idp_authenticator.application.dto.user.UserResponse;
-import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.VerifyAccountUseCase;
 import com.paulopsms.idp_authenticator.domain.exceptions.BusinessException;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+
+import static com.paulopsms.idp_authenticator.domain.entities.user.UserRole.FRESH_USER;
+import static java.util.Arrays.asList;
 
 @RestController
 @RequestMapping("/users")
@@ -39,10 +42,10 @@ public class UserController {
 
     @GetMapping
 //    @PreAuthorize(value = "hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponse>> listAllUsers() {
+    public ResponseEntity<List<String>> listAllUsers() {
         List<UserResponse> users = Collections.emptyList();
-
-        return ResponseEntity.ok(users);
+        List<String> list = asList(FRESH_USER.name(), FRESH_USER.toString());
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/forgot-password")

@@ -5,17 +5,20 @@ import com.paulopsms.idp_authenticator.application.mappers.UserDtoMapper;
 import com.paulopsms.idp_authenticator.application.usecases.login.LoggedInUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.login.LoginUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.login.RefreshTokenUseCase;
-import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.RecoveryUserPasswordUseCase;
+import com.paulopsms.idp_authenticator.application.usecases.user.SaveUserUseCase;
 import com.paulopsms.idp_authenticator.application.usecases.user.VerifyAccountUseCase;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.AuthenticationAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.JwtAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.LoggedInUserAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.login.RefreshTokenAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.adapters.role.RoleRepositoryAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.user.ForgotPasswordEmailAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.user.UserRepositoryAdapter;
 import com.paulopsms.idp_authenticator.infrastructure.adapters.user.VerifyUserAccountEmailAdapter;
+import com.paulopsms.idp_authenticator.infrastructure.mappers.RoleMapper;
 import com.paulopsms.idp_authenticator.infrastructure.mappers.UserMapper;
+import com.paulopsms.idp_authenticator.infrastructure.persistence.role.RoleRepository;
 import com.paulopsms.idp_authenticator.infrastructure.persistence.usuario.UserRepository;
 import com.paulopsms.idp_authenticator.infrastructure.service.EmailService;
 import com.paulopsms.idp_authenticator.infrastructure.service.JwtService;
@@ -29,8 +32,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Config {
 
     @Bean
-    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder, VerifyUserAccountEmailGateway verifyUserAccountEmailGateway) {
-        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder, verifyUserAccountEmailGateway);
+    public SaveUserUseCase createSaveUserUseCase(UserRepositoryGateway userRepositoryGateway, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder,
+                                                 VerifyUserAccountEmailGateway verifyUserAccountEmailGateway, RoleRepositoryGateway roleRepositoryGateway) {
+        return new SaveUserUseCase(userRepositoryGateway, userDtoMapper, passwordEncoder, verifyUserAccountEmailGateway, roleRepositoryGateway);
     }
 
     @Bean
@@ -60,7 +64,7 @@ public class Config {
 
     @Bean
     public AuthenticationGateway createAuthenticationGateway(AuthenticationManager authenticationManager, UserMapper userMapper) {
-       return new AuthenticationAdapter(authenticationManager, userMapper);
+        return new AuthenticationAdapter(authenticationManager, userMapper);
     }
 
     @Bean
@@ -69,8 +73,13 @@ public class Config {
     }
 
     @Bean
-    public UserRepositoryAdapter createUserRepositoryImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserRepositoryAdapter createUserRepositoryGateway(UserRepository userRepository, UserMapper userMapper) {
         return new UserRepositoryAdapter(userRepository, userMapper);
+    }
+
+    @Bean
+    public RoleRepositoryGateway createRoleRepositoryGateway(RoleRepository roleRepository, RoleMapper roleMapper) {
+        return new RoleRepositoryAdapter(roleRepository, roleMapper);
     }
 
     @Bean
@@ -99,7 +108,7 @@ public class Config {
     }
 
     @Bean
-    public VerifyAccountUseCase createVerifyAccountUseCase(UserRepositoryGateway userRepositoryGateway) {
-        return new VerifyAccountUseCase(userRepositoryGateway);
+    public VerifyAccountUseCase createVerifyAccountUseCase(UserRepositoryGateway userRepositoryGateway, RoleRepositoryGateway roleRepositoryGateway) {
+        return new VerifyAccountUseCase(userRepositoryGateway, roleRepositoryGateway);
     }
 }

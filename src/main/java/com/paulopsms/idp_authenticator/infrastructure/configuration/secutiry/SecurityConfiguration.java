@@ -2,19 +2,20 @@ package com.paulopsms.idp_authenticator.infrastructure.configuration.secutiry;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.paulopsms.idp_authenticator.domain.entities.user.UserRole.FRESH_USER;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -70,7 +71,8 @@ public class SecurityConfiguration {
                     req.requestMatchers(POST, "/users").permitAll();
                     req.requestMatchers("/refresh-token").permitAll();
                     req.requestMatchers(POST, "/users/password-recovery").permitAll();
-                    req.requestMatchers(POST, "/users/verify-account").permitAll();
+                    req.requestMatchers(POST, "/users/verify-account").hasRole(FRESH_USER.name());
+                    req.requestMatchers(GET, "/users").hasRole(FRESH_USER.name());
 //                    req.requestMatchers("/api/**").permitAll();
                     req.anyRequest().authenticated();
                 })
@@ -88,5 +90,12 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        String hierarchy = "ADMIN > VERIFIED_USER\n" +
+                "VERIFIED_USER > FRESH_USER";
+        return RoleHierarchyImpl.fromHierarchy(hierarchy);
     }
 }
