@@ -64,7 +64,7 @@ Here you can list the main routes of your API, and what are their expected reque
 | route               | description                                          
 |----------------------|-----------------------------------------------------
 | <kbd>POST /users</kbd>     | Create a new user. See [request details](#post-create-user)
-| <kbd>POST /users/forgot-password</kbd>     | Request password recovery. See [request details](#post-qrcode-detail)
+| <kbd>GET /users/forgot-password</kbd>     | Request password recovery. See [request details](#get-forgot-password)
 | <kbd>POST /users/password-recovery</kbd>     | Update password to recover account. See [request details](#post-qrcode-detail)
 | <kbd>POST /users/verify-account</kbd>     | Validate registered email on account creation. See [request details](#post-qrcode-detail)
 | <kbd>POST /login</kbd>     | Authenticates user and generate a new Token. See [request details](#post-qrcode-detail)
@@ -98,4 +98,47 @@ Here you can list the main routes of your API, and what are their expected reque
 
 * And an email will be sent to the email address of the request.
 ```
+
+<h3 id="get-forgot-password">GET /users/forgot-password</h3>
+
+**REQUEST**
+```json
+
+```
+
+**RESPONSE**
+```json
+
+
+```
+
+<h3 id="get-forgot-password">POST /users/verify-account</h3>
+
+**REQUEST**
+```json
+{
+    "name": "John Doe",
+    "email": "johndoe@email.com",
+    "password": "123"
+}
+```
+
+**RESPONSE**
+```json
+{
+    "id": "ecd08c09-5a97-4325-bd0f-0de026c941a6",
+    "name": "John Doe",
+    "email": "johndoe@email.com",
+    "roles": [
+        {
+            "id": 1,
+            "role": "FRESH_USER"
+        }
+    ]
+}
+
+* And an email will be sent to the email address of the request.
+```
+
+http://localhost:8091/users/verify-account?token=0e4893f7-b43d-40d0-b707-6596cbd02c3e
 
