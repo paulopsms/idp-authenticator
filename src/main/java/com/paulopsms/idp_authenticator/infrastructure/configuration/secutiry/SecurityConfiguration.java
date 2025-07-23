@@ -71,7 +71,7 @@ public class SecurityConfiguration {
                     req.requestMatchers(POST, "/users").permitAll();
                     req.requestMatchers("/refresh-token").permitAll();
                     req.requestMatchers(POST, "/users/password-recovery").permitAll();
-                    req.requestMatchers(POST, "/users/verify-account").hasRole(FRESH_USER.name());
+                    req.requestMatchers(GET, "/users/verify-account/**").permitAll();
                     req.requestMatchers(GET, "/users").hasRole(FRESH_USER.name());
 //                    req.requestMatchers("/api/**").permitAll();
                     req.anyRequest().authenticated();

@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-import static com.paulopsms.idp_authenticator.domain.entities.user.UserRole.FRESH_USER;
-import static java.util.Arrays.asList;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -60,7 +57,7 @@ public class UserController {
         return ResponseEntity.ok("Your password has been updated successfully.");
     }
 
-    @PostMapping("/verify-account")
+    @GetMapping("/verify-account")
     public ResponseEntity<String> verifyAccount(@RequestParam("token") String token) throws BusinessException {
         this.verifyAccountUseCase.verifyAccount(token);
 
