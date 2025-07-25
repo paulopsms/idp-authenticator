@@ -27,7 +27,7 @@ For this project to run, you'll need to have Docker and docker-compose installed
 How to clone your project
 
 ```bash
-git clone https://github.com/paulopsms/qrcode-generator.git
+git clone https://github.com/paulopsms/idp-authenticator.git
 ```
 
 <h3> Environment Variables</h2>
